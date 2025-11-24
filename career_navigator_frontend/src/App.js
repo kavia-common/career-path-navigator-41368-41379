@@ -1,48 +1,55 @@
-import React, { useState, useEffect } from 'react';
-import logo from './logo.svg';
+import React from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
+import { AuthProvider } from './context/AuthContext';
+import { ProtectedLayout } from './components/Layout';
+import { ProtectedRoute } from './routes/ProtectedRoute';
+
+// Pages
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Dashboard from './pages/Dashboard';
+import Roles from './pages/Roles';
+import Competencies from './pages/Competencies';
+import Recommendations from './pages/Recommendations';
+import Resources from './pages/Resources';
+import Jobs from './pages/Jobs';
+import Progress from './pages/Progress';
 
 // PUBLIC_INTERFACE
 function App() {
-  const [theme, setTheme] = useState('light');
-
-  // Effect to apply theme to document element
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-  }, [theme]);
-
-  // PUBLIC_INTERFACE
-  const toggleTheme = () => {
-    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
-  };
-
+  /** Root app with router and providers */
   return (
-    <div className="App">
-      <header className="App-header">
-        <button 
-          className="theme-toggle" 
-          onClick={toggleTheme}
-          aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-        >
-          {theme === 'light' ? '🌙 Dark' : '☀️ Light'}
-        </button>
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <p>
-          Current theme: <strong>{theme}</strong>
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <AuthProvider>
+        <Routes>
+          {/* Public routes */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+
+          {/* Protected routes within app shell */}
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <ProtectedLayout />
+              </ProtectedRoute>
+            }
+          >
+            <Route index element={<Dashboard />} />
+            <Route path="roles" element={<Roles />} />
+            <Route path="competencies" element={<Competencies />} />
+            <Route path="recommendations" element={<Recommendations />} />
+            <Route path="resources" element={<Resources />} />
+            <Route path="jobs" element={<Jobs />} />
+            <Route path="progress" element={<Progress />} />
+          </Route>
+
+          {/* Fallback */}
+          <Route path="*" element={<Login />} />
+        </Routes>
+      </AuthProvider>
+    </BrowserRouter>
   );
 }
 
