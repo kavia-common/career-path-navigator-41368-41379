@@ -4,7 +4,7 @@ Environment
 - Frontend: https://vscode-internal-30268-beta.beta01.cloud.kavia.ai:3000
 - Backend:  https://vscode-internal-30268-beta.beta01.cloud.kavia.ai:3010
 
-Set in frontend:
+Set in frontend (create .env.local using the example provided):
 - REACT_APP_API_BASE=https://vscode-internal-30268-beta.beta01.cloud.kavia.ai:3010
 
 Backend CORS (to avoid console errors):
@@ -23,4 +23,5 @@ Public Data:
 
 Notes:
 - Client sets Authorization: Bearer <token> when logged in.
-- fetch uses credentials: 'include' (cookies not required by backend; leave as-is or remove if backend forbids credentials in CORS).
+- fetch uses credentials: 'include' (cookies not required by backend; safe to leave as-is; if backend forbids credentials, either enable allow_credentials or switch to 'omit' in src/api/client.js).
+- See INTEGRATION_VERIFICATION.md for a checklist to manually verify end-to-end behavior.
